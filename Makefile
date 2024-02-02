@@ -17,6 +17,12 @@ OBJ = $(addprefix $(OBJDIR), $(notdir $(SRC:.c=.o)))
 
 NAME = a.out
 
+LIBFTLIB = libft/
+LIBFTA = $(LIBFTLIB)/libft.a
+
+PIPEXLIB = pipex/
+PIPEXA = $(PIPEXLIB)/pipex.a
+
 LINKING = -lreadline
 
 FLAGS = $(LINKING) \
@@ -28,8 +34,10 @@ $(OBJDIR):
 	mkdir $(OBJDIR)
 
 $(NAME): $(OBJ)
-	@cc $(OBJ) $(FLAGS) -o $(NAME)
-	@echo "$(COLOUR_PURPLE)cc $(OBJ) $(FLAGS) -o $(NAME)$(COLOUR_END)\n"
+	make -C $(LIBFTLIB)
+	make -C $(LIBFTLIB)
+	@cc $(OBJ) $(LIBFTA) $(PIPEXA) $(FLAGS) -o $(NAME)
+	@echo "$(COLOUR_PURPLE)cc $(OBJ) $(LIBFTA) $(PIPEXA) $(FLAGS) -o $(NAME)$(COLOUR_END)\n"
 
 $(OBJ): $(OBJDIR)%.o: $(SRCDIR)%.c
 		@cc $(FLAGS) -c $< -o $@
