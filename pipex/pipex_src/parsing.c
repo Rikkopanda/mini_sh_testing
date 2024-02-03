@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   args_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rik <rik@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 14:35:34 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/01/05 11:32:03 by rik              ###   ########.fr       */
+/*   Updated: 2024/02/03 11:57:36 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,26 @@ int	parse_args(t_args *args, char **argv, int argc, t_data *data)
 {
 	int	i;
 
-	(*args).argssplit = malloc(sizeof(char **) * argc);
+	(*args).argssplit = malloc(sizeof(char **) * (argc + 1));
 	if (!(*args).argssplit)
 		return (-1);
-	i = 1;
-	while (i < argc)
+	i = 0;
+	printf("hello %d argc = %d\n", 10, argc);
+
+	while (i < argc) //012
 	{
-		(*args).argssplit[i - 1] = ft_split(argv[i], ' ');
-		if (!(*args).argssplit[i - 1])
+		(*args).argssplit[i] = ft_split(argv[i], ' ');
+			printf("hello %d %d\n", 110, i);
+		if (!(*args).argssplit[i])
 			return (-1);
+		printf("hello %d\n", 111);
 		i++;
 	}
+	printf("hello %d\n", 11);
+
 	if (ft_strcmp((const char *)(*args).argssplit[0][0], "heredoc") == 0)
 		(*data).heredoc_bool = 1;
-	(*args).argssplit[i - 1] = NULL;
+	(*args).argssplit[argc] = NULL;
 	return (0);
 }
 

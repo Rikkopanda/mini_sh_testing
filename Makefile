@@ -35,7 +35,7 @@ $(OBJDIR):
 
 $(NAME): $(OBJ)
 	make -C $(LIBFTLIB)
-	make -C $(LIBFTLIB)
+	make -C $(PIPEXLIB)
 	@cc $(OBJ) $(LIBFTA) $(PIPEXA) $(FLAGS) -o $(NAME)
 	@echo "$(COLOUR_PURPLE)cc $(OBJ) $(LIBFTA) $(PIPEXA) $(FLAGS) -o $(NAME)$(COLOUR_END)\n"
 
@@ -47,6 +47,8 @@ clean:
 	rm -f $(OBJ)
 
 fclean: clean
+	make fclean -C $(LIBFTLIB)
+	make fclean -C $(PIPEXLIB)
 	rm $(NAME)
 
 re:

@@ -6,7 +6,7 @@ M_SRCS= $(M_SRCSDIR)pipex.c	\
 		$(M_SRCSDIR)helper_functions1.c \
 		$(M_SRCSDIR)helper_functions2.c \
 		$(M_SRCSDIR)pipe_actions.c \
-		$(M_SRCSDIR)args_tools.c \
+		$(M_SRCSDIR)parsing.c \
 		$(M_SRCSDIR)read_timeout.c \
 		gnl/get_next_line.c \
 		gnl/get_next_line_utils.c
@@ -19,19 +19,21 @@ BUF_SIZE = 5
 
 M_EXE = pipex
 
-LIBFTA = libft/libft.a
+LIBFTLIB = ../libft
 
-FLAGS = -Wall -Werror -Wextra
+LIBFTA = $(LIBFTLIB)/libft.a
+
+FLAGS = #-Wall -Werror -Wextra
 
 all: $(M_EXE)
 
 $(M_EXE): $(M_OBJS) $(LIBFTA)
 	cp $(LIBFTA) $(M_A)
 	ar rcs $(M_A) $(M_OBJS)
-	cc $(FLAGS) -g $(M_A) -o $(M_EXE)
+#cc $(FLAGS) -lreadline -g $(M_A) -o $(M_EXE)
 
 $(LIBFTA):
-	make -C libft/
+	make -C $(LIBFTLIB)
 
 $(M_OBJS): %.o: %.c
 		cc $(FLAGS) -DBUFFER_SIZE=$(BUF_SIZE) -g -c $< -o $@
@@ -42,7 +44,7 @@ clean:
 	rm $(M_OBJS)
 
 fclean:
-	make fclean -C libft/
+	make fclean -C $(LIBFTLIB)
 	make clean
 
 re: fclean all

@@ -6,7 +6,7 @@
 /*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 14:34:57 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/02 18:47:26 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/03 12:00:58 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,22 +86,62 @@ int	start_piping(t_data *data)
 	return (0);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	piping(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	if (argc < 4)
+	if (argc < 3)
 		return (0);
-	set_data(argc - 3, envp, &data);
+	set_data(argc - 2, envp, &data);
+	//printf("hello %d\n", 0);
 	if (parse_args(&data.args, argv, argc, &data) == -1)
 		return (free_args(&data.args), 1);
+	//printf("hello %d\n", 1);
 	if (data.heredoc_bool && argc < 5)
 		return (free_args(&data.args), 1);
-	data.buf = read_file(argv[1], -1, &data, &data.args);
+	//printf("hello %d\n", 2);
+	data.buf = read_file(argv[0], -1, &data, &data.args);
+	//printf("hello %d\n", 3);
 	if (start_piping(&data) == -1)
 		return (free_args(&data.args), free(data.buf), 1);
-	write_out_pluscleanup(&data, data.buf, argc - 1 - 1);
+	//printf("hello %d\n", 4);
+	write_out_pluscleanup(&data, data.buf, argc - 1);
+	//printf("hello %d\n", 5);
 	return (WEXITSTATUS(data.status));
 }
 //printf("%d\n", 	errno);
 //printf("%d", WEXITSTATUS(errno));
+
+void	free_double_array(void **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+//int main(int argc, char **argv, char **envp)
+//{
+//	char 	*line = readline("Minishell>");
+//	char 	**split_args;
+//	int		i;
+//	(void)argv;
+//	(void)argc;
+
+//	split_args = ft_split(line, ' ');
+//	i = 0;
+//	while (split_args[i] != NULL)
+//	{
+//		printf("%s\n", split_args[i]);
+//		i++;
+//	}
+//	printf("%d\n", i);
+//	piping(i, split_args, envp);
+//	free_double_array((void **)split_args);
+//	free(line);
+//}

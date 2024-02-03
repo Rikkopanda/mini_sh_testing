@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rik <rik@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 14:35:21 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/01/05 11:21:17 by rik              ###   ########.fr       */
+/*   Updated: 2024/02/03 11:43:17 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	read_loop(int fd, char	**tmp_str, char	**totalbuf)
 		ft_strcat(*totalbuf, next_line);
 		free(next_line);
 		next_line = 0;
+		//printf("helloo\n");
 	}
 	get_next_line(fd, 1);
 	free(*tmp_str);
@@ -97,6 +98,7 @@ char	*read_fd(int fd, t_data *data)
 	tmp_str = malloc(1);
 	if (!totalbuf)
 		return (free(totalbuf), NULL);
+	printf("hello 112\n");
 	tmp_str[0] = '\0';
 	totalbuf[0] = '\0';
 	if (!(*data).receive_read_bool)
@@ -107,6 +109,8 @@ char	*read_fd(int fd, t_data *data)
 	else
 		if (read_loop(fd, &tmp_str, &totalbuf) == -1)
 			return (free(totalbuf), NULL);
+	printf("hello 113\n");
+
 	return (totalbuf);
 }
 

@@ -6,7 +6,7 @@
 /*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 15:04:24 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/02 16:33:04 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/03 11:15:49 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,16 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h> 
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include "../gnl/get_next_line.h"
 # include <sys/wait.h>
 # include "errno.h"
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <sys/wait.h>
 
 # define WRITE 1
 # define READ 0

@@ -6,7 +6,7 @@
 /*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 14:34:57 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/02 18:49:33 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:05:42 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,19 +102,112 @@ int	test_path(int argc, char **argv, char **envp)
 	return (0);
 }
 
-static int	interpret_line(char	*line)
+
+/*
+	format piping:
+	< [infile] [CMD + args] > [outfile] 
+	< [infile] [CMD+ args] > [outfile] 
+	< [infile] [CMD + args] (goes to stdout)
+	
+	[CMD + args] > out
+	[CMD + args] (goes to stdout)
+*/
+
+#define FALSE 0
+#define TRUE 1
+
+typedef int bool;
+
+
+typedef struct s_tokens
+{
+	char	pipe[2];
+	char	direct_in[2];
+	char	direct_out[2];
+	char	heredoc[3];
+	char	append[3];
+	char	pipe_chrs[4];
+	bool	pipex;
+} t_tokens;
+
+typedef struct s_shell_data
+{
+	int			argc;
+	char		**split_line;
+	char		**envp;
+	t_tokens	tokens;
+} t_shell_data;
+
+void init_tokens(t_shell_data *data)
+{
+	ft_strcpy(data->tokens.pipe, "|");
+	ft_strcpy(data->tokens.direct_in, "<");
+	ft_strcpy(data->tokens.direct_out, ">");
+	ft_strcpy(data->tokens.heredoc, "<<");
+	ft_strcpy(data->tokens.append, ">>");
+	ft_strcpy(data->tokens.pipe_chrs, "<>|");
+	data->tokens.pipex = FALSE;
+}
+
+/*
+	use pipex in orignal format,
+	so parse with >, <, <<, etc and put in pipex format?
+	_______________
+	check if format is correct? > < >> << etc..
+*/
+static int	parsing_line(t_shell_data *data, char	*line)
+{
+	if (ft_strstr(line, data->tokens.pipe_chrs) == NULL)
+	{
+		printf("yes\n");
+		data->tokens.pipex = TRUE;
+	}
+	return (0);
+}
+
+static int	init_line(t_shell_data *data, char	*line)
+{
+	int		i;
+
+	data->split_line = ft_split(line, ' ');
+	i = 0;
+	while (data->split_line[i] != NULL)
+	{
+		//printf("%s\n", split_args[i]);
+		i++;
+	}
+	data->argc = i;
+	printf("%d\n", i);
+	return (0);
+}
+
+static int	interpret_line(t_shell_data *data, char	*line)
 {
 	if (ft_strcmp(line, (char *)"exit") == 0)
 	{
 		cleaning_buffer(line);
 		exit(0);
 	}
-	
-
+	init_line(data, line);
+	parsing_line(data, line);
+	if (data->tokens.pipex == TRUE)
+		piping(data->argc, data->split_line, data->envp);
+	/*
+		piping should cleanly exit on succes and fail.
+		also perhaps a usefull status value set somewhere
+	*/
+	free_double_array((void **)data->split_line);
 	cleaning_buffer(line);
+	return (0);
 }
 
-int	loop()
+void	set_minish_data(t_shell_data *data, char **envp)
+{
+	data->envp = envp;
+	init_tokens(data);
+}
+
+int	loop(t_shell_data *data)
 {
 	char	*line;
 
@@ -123,8 +216,7 @@ int	loop()
 		line = readline("Minishell>");
 		if (line)
 			add_history(line);
-		interpret_line(line);
-		printf("%p %p\n", line, rl_line_buffer);
+		interpret_line(data, line);
 	}
 	return (0);
 }
@@ -133,8 +225,14 @@ int	loop()
 
 int	main(int argc, char **argv, char **envp)
 {
+	t_shell_data	data;
+	(void)argv;
+	(void)argc;
+
+
+	set_minish_data(&data, envp);
 	print_welcome();
-	loop();
+	loop(&data);
 
 	return (0);
 }
