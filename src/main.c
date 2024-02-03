@@ -6,36 +6,11 @@
 /*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 14:34:57 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/03 13:10:45 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/03 15:55:59 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define COLOUR_GREEN "\033[0;32m"
-#define COLOUR_PURPLE "\033[0;35m"
-#define COLOUR_END "\033[0m"
-#define COLOUR_BLUE "\033[0;34m"
-#define COLOUR_LIGHT_BLUE "\033[1;34"
-#define COLOUR_CYAN "\033[0;36"
-#define COLOUR_LIGHT_CYAN "\033[1;36"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-#include "../libft/libft.h"
-#include "../pipex/pipex_src/pipex.h"
-#include <string.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <sys/wait.h>
-
-// void set_color(const char color[])
-// {
-// 	printf(color);
-// }
+#include "minishell.h"
 
 int g_signal;
 
@@ -52,27 +27,27 @@ void	cleaning_buffer(char *line)
 	line = (char *)NULL;
 }
 
-void test_sigaction_kill()
-{
-	struct sigaction sa;
+//void test_sigaction_kill()
+//{
+//	struct sigaction sa;
 
-	sa.sa_handler = action;
-	sigaction(SIGTERM, &sa, NULL);
-	pid_t p = fork();
+//	sa.sa_handler = action;
+//	sigaction(SIGTERM, &sa, NULL);
+//	pid_t p = fork();
 
-	if (!p)
-	{
-		printf("child made\n");
-		while (1);
-		//also manually:
-		//ps ax | grep exe
-		//kill -s USR1 <pid>
-	}
-	usleep(2000 * 1000);
-	kill(p, SIGUSR1);
-	waitpid(p, NULL, 0);
-	printf("%d has exit\n", p);
-}
+//	if (!p)
+//	{
+//		printf("child made\n");
+//		while (1);
+//		//also manually:
+//		//ps ax | grep exe
+//		//kill -s USR1 <pid>
+//	}
+//	usleep(2000 * 1000);
+//	kill(p, SIGUSR1);
+//	waitpid(p, NULL, 0);
+//	printf("%d has exit\n", p);
+//}
 
 void print_welcome()
 {
@@ -102,7 +77,6 @@ int	test_path(int argc, char **argv, char **envp)
 	return (0);
 }
 
-
 /*
 	format piping:
 	< [infile] [CMD + args] > [outfile] 
@@ -113,30 +87,6 @@ int	test_path(int argc, char **argv, char **envp)
 	[CMD + args] (goes to stdout)
 */
 
-#define FALSE 0
-#define TRUE 1
-
-typedef int bool;
-
-
-typedef struct s_tokens
-{
-	char	pipe[2];
-	char	direct_in[2];
-	char	direct_out[2];
-	char	heredoc[3];
-	char	append[3];
-	char	pipe_chrs[4];
-	bool	pipex;
-} t_tokens;
-
-typedef struct s_shell_data
-{
-	int			argc;
-	char		**split_line;
-	char		**envp;
-	t_tokens	tokens;
-} t_shell_data;
 
 void init_tokens(t_shell_data *data)
 {
@@ -157,11 +107,18 @@ void init_tokens(t_shell_data *data)
 */
 static int	parsing_line(t_shell_data *data, char	*line)
 {
-	if (ft_strstr_chr(line, data->tokens.pipe_chrs) != NULL)
-	{
-		printf("yes\n");
+	//if (ft_strstr_chr(line, data->tokens.pipe_chrs) != NULL)
+	//{
+	//	printf("yes\n");
+	//	data->tokens.pipex = TRUE;
+	//}
+
+	if (data->split_line[0][0] == '<')
 		data->tokens.pipex = TRUE;
-	}
+	else
+		data->tokens.pipex = FALSE;
+
+
 	return (0);
 }
 
@@ -196,6 +153,16 @@ static int	interpret_line(t_shell_data *data, char	*line)
 		piping should cleanly exit on succes and fail.
 		also perhaps a usefull status value set somewhere
 	*/
+
+	if (data->tokens.pipex == FALSE)
+	{
+		pid_t p = fork();
+
+		if (!p)
+		{
+		}
+	}
+
 	free_double_array((void **)data->split_line);
 	cleaning_buffer(line);
 	return (0);
@@ -223,16 +190,85 @@ int	loop(t_shell_data *data)
 // rl_redisplay();
 // rl_on_new_line();
 
+
+char *get_env_paths(char **env)
+{
+	int		i;
+	char	*ret_ptr;
+
+	i = 0;
+	ret_ptr = NULL;
+	while(env[i])
+	{
+		ret_ptr = ft_strnstr(env[i], "PATH", 4);
+		if (ret_ptr != NULL)
+			return (&ret_ptr[5]);
+		i++;
+	}
+}
+
+#define YES 99
+
+int	check_if_local(char *arg)
+{
+
+}
+
+char	*check_env_path(char *arg, char **envp)
+{
+	int		i;
+	char	*try_path;
+	char	*command;
+	char	**bin_paths;
+
+	bin_paths = ft_split(get_env_paths(envp), ':');
+	command = malloc(sizeof(char) * (ft_strlen(arg) + 1));
+	ft_strcpy(command, "/");
+	ft_strcat(command, arg);
+	i = 0;
+	while (bin_paths[i] != NULL)
+	{
+		try_path = ft_strjoin(bin_paths[i], command);
+		if (access(try_path, X_OK) == 0)
+			return (try_path);
+		i++;
+		printf("%s\n", try_path);
+		free(try_path);
+		try_path = 0;
+	}
+	return (NULL);
+}
+
+char	*find_cmd_path(char *arg, char **envp)
+{
+	int		i;
+	char	*path;
+	char	*command;
+	char	**bin_paths;
+	
+	//if (check_if_local(arg) == YES)
+
+
+
+	return (check_env_path(arg, envp));
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell_data	data;
 	(void)argv;
 	(void)argc;
 
+	char	*try_path = find_cmd_path(argv[1], envp);
 
-	set_minish_data(&data, envp);
-	print_welcome();
-	loop(&data);
+	execve(try_path, &argv[1], envp);
+
+
+
+	//set_minish_data(&data, envp);
+	//print_welcome();
+	//loop(&data);
 
 	return (0);
 }

@@ -36,11 +36,11 @@ $(OBJDIR):
 $(NAME): $(OBJ)
 	make -C $(LIBFTLIB)
 	make -C $(PIPEXLIB)
-	@cc $(OBJ) $(LIBFTA) $(PIPEXA) $(FLAGS) -o $(NAME)
+	@gcc $(OBJ) $(LIBFTA) $(PIPEXA) $(FLAGS) -o $(NAME)
 	@echo "$(COLOUR_PURPLE)cc $(OBJ) $(LIBFTA) $(PIPEXA) $(FLAGS) -o $(NAME)$(COLOUR_END)\n"
 
 $(OBJ): $(OBJDIR)%.o: $(SRCDIR)%.c
-		@cc $(FLAGS) -c $< -o $@
+		@gcc $(FLAGS) -c $< -o $@
 		@echo "$(COLOUR_GREEN)cc $(FLAGS) -c $< -o $@$(COLOUR_END)\n"
 
 clean:
