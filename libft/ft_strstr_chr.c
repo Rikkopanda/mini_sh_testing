@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strstr.c                                        :+:      :+:    :+:   */
+/*   ft_strstr_chr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 12:45:49 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/03 12:50:18 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:10:34 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strstr(char *str, char *to_find)
+char	*ft_strstr_chr(char *str, char *to_find)
 {
 	int i;
 	int j;
 
 	i = 0;
 	if (to_find[0] == '\0')
-		return (str);
+		return (NULL);
 	while (str[i] != '\0')
 	{
 		j = 0;
-		while (str[i + j] != '\0' && str[i + j] == to_find[j])
+		while (to_find[j] != '\0')
 		{
-			if (to_find[j + 1] == '\0')
+			if (to_find[j] == str[i])
 				return (&str[i]);
 			++j;
 		}

@@ -6,7 +6,7 @@
 /*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 14:34:57 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/03 13:05:42 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:10:45 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void init_tokens(t_shell_data *data)
 */
 static int	parsing_line(t_shell_data *data, char	*line)
 {
-	if (ft_strstr(line, data->tokens.pipe_chrs) == NULL)
+	if (ft_strstr_chr(line, data->tokens.pipe_chrs) != NULL)
 	{
 		printf("yes\n");
 		data->tokens.pipex = TRUE;

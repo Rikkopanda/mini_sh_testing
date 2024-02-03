@@ -20,7 +20,7 @@ SRCS = ft_atoi.c \
 	  ft_strlcpy.c \
 	  ft_strlen.c \
 	  ft_strrchr.c \
-	  ft_strstr.c \
+	  ft_strstr_chr.c \
 	  ft_strnstr.c \
 	  ft_strncmp.c \
 	  ft_strdup.c \
