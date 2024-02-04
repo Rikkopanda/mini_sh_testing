@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rik <rik@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 15:04:52 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/03 15:21:10 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/04 19:08:50 by rik              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 typedef int bool;
 
 
-typedef struct s_tokens
+typedef struct s_symbols
 {
 	char	pipe[2];
 	char	direct_in[2];
@@ -49,20 +49,31 @@ typedef struct s_tokens
 	char	heredoc[3];
 	char	append[3];
 	char	pipe_chrs[4];
-	bool	pipex;
-} t_tokens;
+} t_symbols;
+
+typedef struct s_sections
+{
+	bool	cmd;
+	char 	*content;
+	bool	file;
+	bool	last_outfile;
+} t_sections;
+// content includes arguments
 
 typedef struct s_shell_data
 {
+	bool		pipex;
+	bool		heredoc;
 	int			argc;
+	t_sections	*sections;
 	char		**split_line;
 	char		**envp;
-	t_tokens	tokens;
+	t_symbols	symbols;
 } t_shell_data;
 
-
-
-char *get_env_paths(char **env);
-
+int		parse(t_shell_data *data, char	*line);
+char	*find_cmd_path(char *arg, char **envp);
+void	launch(t_shell_data *data);
+void	clearing(t_shell_data *data, char	*line);
 
 #endif

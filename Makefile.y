@@ -11,17 +11,17 @@ COLOUR_LIGHT_BLUE=\033[1;34
 COLOUR_CYAN=\033[0;36
 COLOUR_LIGHT_CYAN=\033[1;36
 
-SRC = $(addprefix $(SRCDIR), main.c)
+SRC = $(addprefix $(SRCDIR), main.c, get_path.c, test.c)
 
 OBJ = $(addprefix $(OBJDIR), $(notdir $(SRC:.c=.o)))
 
 NAME = a.out
 
 LIBFTLIB = libft/
-LIBFTA = $(LIBFTLIB)/libft.a
+LIBFTA = $(LIBFTLIB)libft.a
 
 PIPEXLIB = pipex/
-PIPEXA = $(PIPEXLIB)/pipex.a
+PIPEXA = $(PIPEXLIB)pipex.a
 
 LINKING = -lreadline
 
@@ -34,6 +34,8 @@ $(OBJDIR):
 	mkdir $(OBJDIR)
 
 $(NAME): $(OBJ)
+	echo $(SRC)
+	echo $(OBJ)
 	make -C $(LIBFTLIB)
 	make -C $(PIPEXLIB)
 	@gcc $(OBJ) $(LIBFTA) $(PIPEXA) $(FLAGS) -o $(NAME)

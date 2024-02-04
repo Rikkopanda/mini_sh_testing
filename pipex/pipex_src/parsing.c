@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   args_tools.c                                       :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rik <rik@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 14:35:34 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/03 11:57:36 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/04 18:36:24 by rik              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,13 @@ int	parse_args(t_args *args, char **argv, int argc, t_data *data)
 	if (!(*args).argssplit)
 		return (-1);
 	i = 0;
-	printf("hello %d argc = %d\n", 10, argc);
-
-	while (i < argc) //012
+	while (i < argc)
 	{
 		(*args).argssplit[i] = ft_split(argv[i], ' ');
-			printf("hello %d %d\n", 110, i);
 		if (!(*args).argssplit[i])
 			return (-1);
-		printf("hello %d\n", 111);
 		i++;
 	}
-	printf("hello %d\n", 11);
-
 	if (ft_strcmp((const char *)(*args).argssplit[0][0], "heredoc") == 0)
 		(*data).heredoc_bool = 1;
 	(*args).argssplit[argc] = NULL;

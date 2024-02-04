@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rik <rik@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 14:34:57 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/03 12:00:58 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/04 18:15:40 by rik              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,20 +93,15 @@ int	piping(int argc, char **argv, char **envp)
 	if (argc < 3)
 		return (0);
 	set_data(argc - 2, envp, &data);
-	//printf("hello %d\n", 0);
 	if (parse_args(&data.args, argv, argc, &data) == -1)
 		return (free_args(&data.args), 1);
-	//printf("hello %d\n", 1);
 	if (data.heredoc_bool && argc < 5)
 		return (free_args(&data.args), 1);
-	//printf("hello %d\n", 2);
 	data.buf = read_file(argv[0], -1, &data, &data.args);
-	//printf("hello %d\n", 3);
 	if (start_piping(&data) == -1)
 		return (free_args(&data.args), free(data.buf), 1);
-	//printf("hello %d\n", 4);
 	write_out_pluscleanup(&data, data.buf, argc - 1);
-	//printf("hello %d\n", 5);
+
 	return (WEXITSTATUS(data.status));
 }
 //printf("%d\n", 	errno);
