@@ -32,6 +32,8 @@ $(OBJDIR):
 	mkdir $(OBJDIR)
 
 $(NAME): $(OBJ)
+	make -C $(PIPEXLIB)
+	make -C $(LIBFTLIB)
 	cc $(OBJ) $(PIPEXA) $(LIBFTA) $(FLAGS) -o $(NAME)
 
 $(OBJ): $(OBJDIR)%.o: $(SRCDIR)%.c
@@ -41,6 +43,8 @@ clean:
 	rm -f $(OBJ)
 
 fclean: clean
+	make fclean -C $(PIPEXLIB)
+	make fclean -C $(LIBFTLIB)
 	rm $(NAME)
 
 re:

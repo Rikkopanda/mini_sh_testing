@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rik <rik@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 15:04:52 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/04 19:08:50 by rik              ###   ########.fr       */
+/*   Updated: 2024/02/05 14:41:55 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,12 @@ typedef struct s_symbols
 
 typedef struct s_sections
 {
+	char 	**content;
 	bool	cmd;
-	char 	*content;
-	bool	file;
+	bool	infile;
+	bool	outfile;
 	bool	last_outfile;
+	next;
 } t_sections;
 // content includes arguments
 

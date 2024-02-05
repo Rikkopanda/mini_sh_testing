@@ -30,6 +30,7 @@ all: $(M_EXE)
 $(M_EXE): $(M_OBJS) $(LIBFTA)
 	cp $(LIBFTA) $(M_A)
 	ar rcs $(M_A) $(M_OBJS)
+
 #cc $(FLAGS) -lreadline -g $(M_A) -o $(M_EXE)
 
 $(LIBFTA):
