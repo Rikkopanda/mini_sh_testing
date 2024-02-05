@@ -6,7 +6,7 @@
 /*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 15:04:52 by rverhoev          #+#    #+#             */
-/*   Updated: 2024/02/05 14:41:55 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:50:34 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct s_sections
 	bool	infile;
 	bool	outfile;
 	bool	last_outfile;
-	next;
 } t_sections;
 // content includes arguments
 

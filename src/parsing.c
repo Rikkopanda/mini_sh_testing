@@ -6,7 +6,7 @@
 /*   By: rverhoev <rverhoev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 18:53:34 by rik               #+#    #+#             */
-/*   Updated: 2024/02/05 14:36:01 by rverhoev         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:53:13 by rverhoev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ static int	init_arguments(t_shell_data *data, char	*line)
 	while (data->split_line[i] != NULL)
 		i++;
 	t_sections *sections = malloc(sizeof(t_sections) * i);
-	int	line_size = i;
+
 	while (i >= 0)
 	{
-		sections[i].content = malloc(sizeof(sections->content) * i);
-		sections[i].content = NULL;
+		sections[i].content = malloc(sizeof(sections->content) * 4);
+		sections[i].content[0] = NULL;
 		sections[i].infile = FALSE;
 		sections[i].outfile = FALSE;
 		sections[i].cmd = FALSE;
@@ -34,7 +34,7 @@ static int	init_arguments(t_shell_data *data, char	*line)
 	while (data->split_line[i] != NULL)
 	{
 		printf("%s\n", data->split_line[i]);
-		if (i == 0 && data->split_line[i][0] == "<")
+		if (i == 0 && data->split_line[i][0] == '<')
 		{
 			sections[i].infile = TRUE;
 			sections[i].content[0] = data->split_line[i + 1];
@@ -44,14 +44,14 @@ static int	init_arguments(t_shell_data *data, char	*line)
 		else
 		{
 			sections[i].cmd = TRUE;
-			sections[i].content = data->split_line[i];
 			int	cmd_args_i = 0;
 			while (ft_strstr_chr(data->split_line[i + cmd_args_i], data->symbols.pipe_chrs) == NULL &&
 					data->split_line[i + cmd_args_i] != NULL)
 			{
-				
+				sections[i].content[cmd_args_i] = data->split_line[i + cmd_args_i];
 				cmd_args_i++;
 			}
+			sections[i].content[cmd_args_i] = NULL;
 		}
 		i++;
 	}
